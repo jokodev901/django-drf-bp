@@ -1,0 +1,5 @@
+/.venv/
+/.idea/
+notes.txt
+*.sqlite3
+*.ini
