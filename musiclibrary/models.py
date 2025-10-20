@@ -45,7 +45,7 @@ class Track(BaseModel):
     name = models.CharField(max_length=255)
     number = models.IntegerField() # Track number on associated album
     duration_ms = models.IntegerField() # Track duration in milliseconds
-    artist = models.ManyToManyField(Artist)
+    artist = models.ManyToManyField(Artist, related_name='tracks')
     genre = models.ForeignKey(Genre, on_delete=models.CASCADE, null=True)
     album = models.ForeignKey(Album, related_name='tracks', on_delete=models.CASCADE)
 

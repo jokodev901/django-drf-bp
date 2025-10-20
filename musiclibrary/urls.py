@@ -11,4 +11,6 @@ router.register(r'tracks', views.TrackViewSet, basename='track')
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('artisttracks/', views.ArtistTrackList.as_view()),
+    path('slowartisttracks/', views.ArtistTrackListSlow.as_view()),
 ]

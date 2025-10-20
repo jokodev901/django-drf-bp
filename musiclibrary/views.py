@@ -1,7 +1,7 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, generics
 
 from .models import Artist, Album, Track
-from .serializers import ArtistSerializer, AlbumSerializer, TrackSerializer
+from .serializers import ArtistSerializer, AlbumSerializer, TrackSerializer, ArtistTrackSerializer
 
 
 class ArtistViewSet(viewsets.ModelViewSet):
@@ -56,3 +56,30 @@ class TrackViewSet(viewsets.ModelViewSet):
 
     queryset = Track.objects.all()
     serializer_class = TrackSerializer
+
+
+class ArtistTrackList(generics.ListAPIView):
+    """
+    View intended for use with ArtistTrackSerializer to return all related tracks nested within each Artist
+
+    Overridden get_queryset method adds in a prefetch condition for related tracks in order to avoid n+1 queries being
+    executed.
+
+    For comparison, use ArtistTrackListSlow to trigger n+1 case
+    """
+    serializer_class = ArtistTrackSerializer
+
+    def get_queryset(self):
+        queryset = Artist.objects.all()
+        queryset = queryset.prefetch_related('tracks', 'tracks__artist')
+        return queryset
+
+
+class ArtistTrackListSlow(generics.ListAPIView):
+    """
+    View intended for use with ArtistTrackSerializer to return all related tracks nested within each Artist
+
+    Uses stock ListAPIView with no modifications to demonstrate n+1 problem when querying related tracks
+    """
+    queryset = Artist.objects.all()
+    serializer_class = ArtistTrackSerializer
