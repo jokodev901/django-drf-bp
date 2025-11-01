@@ -1,3 +1,4 @@
 django-rest-knox
 djangorestframework
 django
+gunicorn

@@ -21,7 +21,8 @@ class Artist(BaseModel):
 
 class Album(BaseModel):
     name = models.CharField(max_length=255)
-    primary_artist = models.ForeignKey(Artist, on_delete=models.CASCADE) # Primary "author" artist for the album
+    # Primary "author" artist for the album, a full list of artists can be aggregated from tracks on the album
+    primary_artist = models.ForeignKey(Artist, on_delete=models.CASCADE)
 
     class Meta:
         ordering = ['name']

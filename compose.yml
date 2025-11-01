@@ -1,0 +1,28 @@
+services:
+ django-web:
+   build: .
+   container_name: django_drf_bp
+   volumes:
+     - .:/app
+     - static_volume:/app/staticfiles
+   ports:
+     - "8000:8000"
+   environment:
+     DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
+     DEBUG: ${DJANGO_DEBUG}
+     DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS}
+   env_file:
+     - .env
+
+ nginx:
+   image: nginx:stable-alpine
+   ports:
+     - "80:80"
+   volumes:
+     - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+     - static_volume:/app/staticfiles:ro
+   depends_on:
+     - django-web
+
+volumes:
+ static_volume:

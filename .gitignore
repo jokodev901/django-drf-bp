@@ -3,3 +3,4 @@
 notes.txt
 *.sqlite3
 *.ini
+.env
