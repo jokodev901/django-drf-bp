@@ -1,8 +1,13 @@
 from rest_framework import viewsets, generics
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 from .models import Artist, Album, Track
 from .serializers import ArtistSerializer, AlbumSerializer, TrackSerializer, ArtistTrackSerializer
+from .services import Spotify
 
+
+spotify = Spotify()
 
 class ArtistViewSet(viewsets.ModelViewSet):
     """
@@ -83,3 +88,8 @@ class ArtistTrackListSlow(generics.ListAPIView):
     """
     queryset = Artist.objects.all()
     serializer_class = ArtistTrackSerializer
+
+
+class SpotifyTest(APIView):
+    def get(self, request):
+        return Response(spotify.artists())

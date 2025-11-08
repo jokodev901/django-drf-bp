@@ -1,4 +1,5 @@
+django
 django-rest-knox
 djangorestframework
-django
 gunicorn
+requests

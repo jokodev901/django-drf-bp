@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 import os
 from pathlib import Path
 from datetime import timedelta
+from django.core.management.utils import get_random_secret_key
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,13 +22,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', get_random_secret_key())
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DJANGO_DEBUG')
+DEBUG = os.environ.get('DJANGO_DEBUG', True)
 
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS","127.0.0.1").split(",")
-CSRF_TRUSTED_ORIGINS = os.environ.get("DJANGO_TRUSTED_ORIGINS","127.0.0.1").split(",")
+CSRF_TRUSTED_ORIGINS = os.environ.get("DJANGO_TRUSTED_ORIGINS","http://127.0.0.1").split(",")
 
 # Application definition
 
@@ -145,7 +147,7 @@ REST_KNOX = {
 }
 
 # Logging settings
-LOGLEVEL = os.environ.get('DJANGO_LOGLEVEL')
+LOGLEVEL = os.environ.get('DJANGO_LOGLEVEL', 'DEBUG')
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -162,3 +164,9 @@ LOGGING = {
         },
     },
 }
+
+# Spotify API settings
+SPOTIFY_CLIENT_ID = os.environ.get('SPOTIFY_CLIENT_ID')
+SPOTIFY_CLIENT_SECRET = os.environ.get('SPOTIFY_CLIENT_SECRET')
+SPOTIFY_BASE_URL = os.environ.get('SPOTIFY_BASE_URL')
+SPOTIFY_AUTH_URL = os.environ.get('SPOTIFY_AUTH_URL')
