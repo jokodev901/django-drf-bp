@@ -13,5 +13,5 @@ urlpatterns = [
     path('', include(router.urls)),
     path('artisttracks/', views.ArtistTrackList.as_view()),
     path('slowartisttracks/', views.ArtistTrackListSlow.as_view()),
-    path('spotifytest/', views.SpotifyTest.as_view()),
+    path('spotifyartist/', views.SpotifyArtist.as_view()),
 ]

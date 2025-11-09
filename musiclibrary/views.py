@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from .models import Artist, Album, Track
-from .serializers import ArtistSerializer, AlbumSerializer, TrackSerializer, ArtistTrackSerializer
+from .serializers import album_serializers, artist_serializers, track_serializers
 from .services import Spotify
 
 
@@ -24,7 +24,7 @@ class ArtistViewSet(viewsets.ModelViewSet):
     """
 
     queryset = Artist.objects.all()
-    serializer_class = ArtistSerializer
+    serializer_class = artist_serializers.ArtistSerializer
 
 
 class AlbumViewSet(viewsets.ModelViewSet):
@@ -42,7 +42,7 @@ class AlbumViewSet(viewsets.ModelViewSet):
     """
 
     queryset = Album.objects.all()
-    serializer_class = AlbumSerializer
+    serializer_class = album_serializers.AlbumSerializer
     
 
 class TrackViewSet(viewsets.ModelViewSet):
@@ -60,7 +60,7 @@ class TrackViewSet(viewsets.ModelViewSet):
     """
 
     queryset = Track.objects.all()
-    serializer_class = TrackSerializer
+    serializer_class = track_serializers.TrackSerializer
 
 
 class ArtistTrackList(generics.ListAPIView):
@@ -72,7 +72,7 @@ class ArtistTrackList(generics.ListAPIView):
 
     For comparison, use ArtistTrackListSlow to trigger n+1 case
     """
-    serializer_class = ArtistTrackSerializer
+    serializer_class = artist_serializers.ArtistTrackSerializer
 
     def get_queryset(self):
         queryset = Artist.objects.all()
@@ -87,9 +87,14 @@ class ArtistTrackListSlow(generics.ListAPIView):
     Uses stock ListAPIView with no modifications to demonstrate n+1 problem when querying related tracks
     """
     queryset = Artist.objects.all()
-    serializer_class = ArtistTrackSerializer
+    serializer_class = artist_serializers.ArtistTrackSerializer
 
 
-class SpotifyTest(APIView):
+class SpotifyArtist(APIView):
     def get(self, request):
-        return Response(spotify.artists())
+        return Response(spotify.artists(request.query_params.get('id')))
+
+
+class SpotifySearch(APIView):
+    def get(self, request):
+        return Response(spotify.artists(request.query_params.get('id')))
